@@ -38,7 +38,7 @@ function DefaultTemplateGenerator() {
                rules.indexOf("number") >= 0 || rules.indexOf("digits") >= 0)
             { return createInputType(property, "number", idPrefix, idSuffix); }
 
-            if(rules.indexOf("date"))
+            if(rules.indexOf("date") >= 0)
             { return createInputType(property, "date", idPrefix, idSuffix); }
         }
 

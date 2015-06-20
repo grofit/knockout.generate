@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="utf-8">
+	<title>Template Generator Test</title>
+</head>
+
+<body>
+<h1>Generating Templates!</h1>
+
+<h2>Using normal binding</h2>
+<div data-bind="generate: { for: $root }"></div>
+
+<h2>Using virtual binding with custom prefix</h2>
+<!-- ko generate: { for: $root, idPrefix: 'second-' } -->
+<!-- /ko -->
+
+<script type="text/javascript" src="../libs/knockout-3.2.0.min.js"></script>
+<script type="text/javascript" src="../src/knockout.generate.js"></script>
+<script type="text/javascript" src="libs/knockout.validation.min.js"></script>
+<script type="text/javascript" src="libs/example-view-model.js"></script>
+<script type="text/javascript">
+	var vm = new SomeVm();
+	ko.applyBindings(vm);
+</script>
+</body>
+</html>

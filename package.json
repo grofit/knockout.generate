@@ -1,0 +1,8 @@
+{
+  "name": "knockout.generate",
+  "private": true,
+  "devDependencies": {
+    "gulp": "3.9.0",
+    "gulp-mustache": "1.0.2"
+  }
+}

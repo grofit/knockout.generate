@@ -23,11 +23,11 @@
 <body>
 <h1>Generating Templates!</h1>
 
-<h2>Using normal binding</h2>
+<h2>Using normal binding with defaults</h2>
 <div data-bind="generate: { for: $root }"></div>
 
-<h2>Using virtual binding with custom prefix</h2>
-<!-- ko generate: { for: $root, idPrefix: 'second-' } -->
+<h2>Using virtual binding with custom settings</h2>
+<!-- ko generate: { for: $root, idPrefix: 'second', withLabels: false, withContainer: false } -->
 <!-- /ko -->
 
 <script type="text/javascript" src="../libs/knockout-3.2.0.min.js"></script>

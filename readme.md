@@ -77,6 +77,14 @@ make the type a password input box, or if the data value is true/false then it w
 
 There is also the `type` value which can influence which generator is used, and this can all be customised, like shown next.
 
+The default template generator args are:
+
+* **for** - The vm you wish to generate the markup for
+* **idPrefix** - The prefix to give an elements id, general format is <prefix>-<name-of-property-as-spinal-case>-<suffix>, defaulted to nothing
+* **idSuffix** - The suffix to give an elements id
+* **withLabels** - If labels should be generated before the input element, defaults to true
+* **withPlaceholders** - If placeholders should be generated for the input elements, defaults to true
+* **withContainer** - If container divs should wrap each input (and possible label), defaults to true
 
 ## Customisation
 

@@ -2,27 +2,45 @@ function DefaultTemplateGenerator() {
     this.generatorType = "default";
 
     var createCheckbox = function(property) {
-        var element = document.createElement("input");
-        element.type = "checkbox";
-        element.setAttribute("data-bind", "checked: " + property);
-        return element;
+        var inputElement = document.createElement("input");
+        inputElement.type = "checkbox";
+        inputElement.setAttribute("data-bind", "checked: " + property);
+        return inputElement;
     };
 
     var createInputType = function(property, type) {
-        var element = document.createElement("input");
-        element.type = type;
-        element.setAttribute("data-bind", "value: " + property);
-        return element;
+        var inputElement = document.createElement("input");
+        inputElement.type = type;
+        inputElement.setAttribute("data-bind", "value: " + property);
+        return inputElement;
+    };
+
+    var createLabelFor = function(element, property) {
+        var labelElement = document.createElement("label");
+        labelElement.htmlFor = element.id;
+        labelElement.innerHTML = makeTextualName(property);
+        return labelElement;
+    };
+
+    var createContainer = function() {
+        var containerElement = document.createElement("div");
+        return containerElement;
     };
 
     var generateId = function(property, idPrefix, idSuffix) {
-        return idPrefix + property.toLowerCase() + idSuffix;
+        var generatedId = "";
+
+        if(idPrefix) { generatedId += (idPrefix + "-"); }
+        generatedId += makeSpinalCase(property);
+        if(idSuffix) { generatedId += ("-" + idSuffix); }
+
+        return generatedId;
     };
 
     var createInputElement = function(property, observable) {
         var observableValue = observable();
 
-        if(observableValue === true || observableValue === false)
+        if(isBoolean(observableValue))
         { return createCheckbox(property); }
 
         if(isNumber(observableValue))
@@ -55,9 +73,14 @@ function DefaultTemplateGenerator() {
         return createInputType(property, "text");
     };
 
-    var createForObservable = function(property, observable, idPrefix, idSuffix) {
+    var createForObservable = function(property, observable, idPrefix, idSuffix, withPlaceholders) {
         var inputElement = createInputElement(property, observable);
-        inputElement.id = generateId(property, idPrefix, idSuffix);
+
+        if(withPlaceholders && inputElement.type != "checkbox") {
+            var placeholderText = makeTextualName(property);
+            inputElement.placeholder = placeholderText;
+        }
+
         return inputElement;
     };
 
@@ -65,13 +88,36 @@ function DefaultTemplateGenerator() {
         var model = allBindings.for;
         var idPrefix = allBindings.idPrefix || "";
         var idSuffix = allBindings.idSuffix || "";
+        var withLabels = isBoolean(allBindings.withLabels) ? allBindings.withLabels : true;
+        var withPlaceholders = isBoolean(allBindings.withPlaceholders) ? allBindings.withPlaceholders : true;
+        var withContainer = isBoolean(allBindings.withContainer) ? allBindings.withContainer : true;
+
         var generatedElements = [];
-        var createdElement;
+        var inputElement, labelElement, containerElement;
+
         for(var property in model)
         {
             if(ko.isObservable(model[property])) {
-                createdElement = createForObservable(property, model[property], idPrefix, idSuffix);
-                generatedElements.push(createdElement);
+                inputElement = createForObservable(property, model[property], idPrefix, idSuffix, withPlaceholders);
+                inputElement.id = generateId(property, idPrefix, idSuffix) + "-input";
+
+                if(withLabels) {
+                    labelElement = createLabelFor(inputElement, property);
+                    labelElement.id = generateId(property, idPrefix, idSuffix) + "-label";
+                }
+
+                if(withContainer){
+                    containerElement = createContainer();
+                    containerElement.id = generateId(property, idPrefix, idSuffix) + "-container";
+
+                    if(withLabels) { containerElement.appendChild(labelElement); }
+                    containerElement.appendChild(inputElement);
+                    generatedElements.push(containerElement);
+                }
+                else {
+                    if(withLabels) { generatedElements.push(labelElement); }
+                    generatedElements.push(inputElement);
+                }
             }
         }
         return generatedElements;

@@ -14,3 +14,21 @@ function isNumber(obj) {
 function isDate(obj) {
     return obj instanceof Date && !isNaN(obj.valueOf());
 }
+
+function isBoolean(obj) {
+    return obj === true || obj === false;
+}
+
+function makeTextualName(name) {
+    return name.replace(/([A-Z])/g, ' $1')
+        .trim()
+        .toLowerCase()
+        .replace(/\b\w/g, function(match) { return match.toUpperCase() });
+}
+
+function makeSpinalCase(name) {
+    return name.replace(/([A-Z])/g, ' $1')
+        .trim()
+        .replace(" ", "-")
+        .toLowerCase();
+}
